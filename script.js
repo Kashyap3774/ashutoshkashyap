@@ -310,6 +310,11 @@ function render() {
   // Footer
   $("#year").textContent = String(new Date().getFullYear());
   $("#footerName").textContent = p.name;
+  $("#footerLinks").innerHTML = `
+    <a href="${p.github}" target="_blank" rel="noreferrer">GitHub</a>
+    <span class="dot">•</span>
+    <a href="${p.linkedin}" target="_blank" rel="noreferrer">LinkedIn</a>
+  `;
 }
 
 /* ---------------------------
@@ -345,11 +350,14 @@ function renderProjects(category) {
     : DATA.projects.filter((p) => p.category === category);
 
   list.forEach((p) => {
-    const card = document.createElement("a");
+    const hasLink = p.link && p.link !== "#";
+    const card = document.createElement(hasLink ? "a" : "div");
     card.className = "pCard";
-    card.href = p.link || "#";
-    card.target = p.link && p.link !== "#" ? "_blank" : "_self";
-    card.rel = p.link && p.link !== "#" ? "noreferrer" : "";
+    if (hasLink) {
+      card.href = p.link;
+      card.target = "_blank";
+      card.rel = "noreferrer";
+    }
 
     card.innerHTML = `
       <h3 class="pName">${p.name}</h3>
@@ -357,7 +365,7 @@ function renderProjects(category) {
       <div class="pTags">
         ${p.tags.map((t) => `<span class="pTag">${t}</span>`).join("")}
       </div>
-      <div class="pLink">Open →</div>
+      ${p.link && p.link !== "#" ? `<div class="pLink">View →</div>` : ""}
     `;
 
     grid.appendChild(card);

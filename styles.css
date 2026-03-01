@@ -29,6 +29,11 @@
 
 *{box-sizing:border-box}
 html,body{height:100%}
+html{scroll-behavior:smooth}
+
+/* Global form reset */
+button,input{font-family:inherit; color:inherit;}
+
 body{
   margin:0;
   font-family: var(--font);
@@ -244,7 +249,9 @@ a:hover{opacity:.92}
   background: rgba(255,255,255,.06);
   border-radius: var(--radius);
   padding: 14px;
+  transition: background .15s ease;
 }
+.metaCard:hover{ background: rgba(255,255,255,.09); }
 .metaLabel{ display:block; font-size: 12px; color: var(--muted); }
 .metaValue{ display:block; margin-top: 8px; font-weight: 600; }
 .dot{ margin: 0 8px; color: var(--muted); }
@@ -499,11 +506,18 @@ a:hover{opacity:.92}
   border-top: 1px solid var(--line);
   display:flex;
   justify-content:space-between;
+  align-items:center;
   gap: 12px;
   color: var(--muted);
   font-size: 13px;
   flex-wrap:wrap;
 }
+.footer__links{
+  display:flex;
+  align-items:center;
+  gap: 4px;
+}
+.footer__links a:hover{ opacity:1; color: var(--text); }
 
 /* Floating action buttons */
 .fab{
@@ -549,6 +563,12 @@ a:hover{opacity:.92}
   display:flex;
   flex-direction:column;
   gap: 6px;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.eduCard:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  background: rgba(255,255,255,.08);
 }
 .eduTop{
   display:flex;
