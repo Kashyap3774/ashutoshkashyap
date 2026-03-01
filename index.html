@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ashutosh Kashyap • Portfolio</title>
+  <meta name="description" content="Ashutosh Kashyap - Software Engineer • Full-Stack • Cloud • GenAI. Projects, experience, skills, and contact." />
+
+  <!-- Social preview -->
+  <meta property="og:title" content="Ashutosh Kashyap • Portfolio" />
+  <meta property="og:description" content="Software Engineer • Full-Stack • Cloud • GenAI" />
+  <meta property="og:type" content="website" />
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <!-- Top progress -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a class="brand" href="#top" aria-label="Go to top">
+        <span class="brand__mark" id="brandInitials">AK</span>
+        <span class="brand__text">
+          <span class="brand__name" id="brandName">Ashutosh Kashyap</span>
+          <span class="brand__role" id="brandRole">Portfolio</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <a class="nav__link" href="#about">About</a>
+        <a class="nav__link" href="#education">Education</a>
+        <a class="nav__link" href="#experience">Experience</a>
+        <a class="nav__link" href="#projects">Projects</a>
+        <a class="nav__link" href="#skills">Skills</a>
+        <a class="nav__link" href="#contact">Contact</a>
+      </nav>
+
+      <div class="header__actions">
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle theme" title="Toggle theme">
+          <!-- sun/moon icon toggled by JS -->
+          <svg class="icon" id="themeIcon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" fill="currentColor"/>
+          </svg>
+        </button>
+
+        <button class="icon-btn icon-btn--menu" id="menuBtn" type="button" aria-label="Open menu">
+          <span class="menuBars" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile" id="mobileMenu" aria-hidden="true">
+      <div class="container mobile__inner">
+        <a href="#about" class="mobile__link">About</a>
+        <a href="#education" class="mobile__link">Education</a>
+        <a href="#experience" class="mobile__link">Experience</a>
+        <a href="#projects" class="mobile__link">Projects</a>
+        <a href="#skills" class="mobile__link">Skills</a>
+        <a href="#contact" class="mobile__link">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero__inner reveal">
+        <div class="pill" id="availabilityPill">Available for collaborations • Remote / Onsite</div>
+
+        <h1 class="hero__title" id="heroName">Ashutosh Kashyap</h1>
+        <p class="hero__subtitle" id="heroHeadline">Software Engineer • Full-Stack • Cloud • GenAI</p>
+
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#projects">
+            View Projects
+            <span class="btn__arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="btn btn--ghost" href="#contact">Contact</a>
+        </div>
+
+        <div class="hero__meta">
+          <div class="metaCard">
+            <span class="metaLabel">Email</span>
+            <a class="metaValue" id="emailInline" href="#">-</a>
+          </div>
+          <div class="metaCard">
+            <span class="metaLabel">WhatsApp</span>
+            <a class="metaValue" id="waInline" href="#" target="_blank" rel="noreferrer">Message</a>
+          </div>
+          <div class="metaCard">
+            <span class="metaLabel">Links</span>
+            <span class="metaValue">
+              <a id="linkedinInline" href="#" target="_blank" rel="noreferrer">LinkedIn</a>
+              <span class="dot">•</span>
+              <a id="githubInline" href="#" target="_blank" rel="noreferrer">GitHub</a>
+            </span>
+          </div>
+        </div>
+
+        <a class="scrollHint" href="#about" aria-label="Scroll to About">
+          <span class="scrollHint__line" aria-hidden="true"></span>
+          <span class="scrollHint__text">Scroll</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="container reveal">
+        <div class="section__head">
+          <h2 class="section__title">About</h2>
+          <p class="section__desc" id="aboutTagline">-</p>
+        </div>
+
+        <div class="grid grid--2">
+          <div class="card">
+            <h3 class="card__title">Summary</h3>
+            <div class="card__body" id="aboutSummary"></div>
+
+            <div class="chipRow" id="aboutChips"></div>
+
+            <div class="card__actions">
+              <a class="btn btn--soft" id="resumeBtn" href="#" target="_blank" rel="noreferrer">Download CV</a>
+              <button class="btn btn--soft" id="copyEmailBtn" type="button">Copy Email</button>
+            </div>
+          </div>
+
+          <div class="card card--glass">
+            <h3 class="card__title">Quick highlights</h3>
+            <div class="highlights" id="highlights"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="section" id="education">
+      <div class="container reveal">
+        <div class="section__head">
+          <h2 class="section__title">Education</h2>
+          <p class="section__desc">Academic qualifications and institutions.</p>
+        </div>
+        <div class="eduGrid" id="educationList"></div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="section" id="experience">
+      <div class="container reveal">
+        <div class="section__head">
+          <h2 class="section__title">Experience</h2>
+          <p class="section__desc">A timeline of roles and responsibilities.</p>
+        </div>
+
+        <div class="timeline" id="experienceList"></div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section" id="projects">
+      <div class="container reveal">
+        <div class="section__head">
+          <h2 class="section__title">Projects</h2>
+          <p class="section__desc">Selected work. Filter by category.</p>
+        </div>
+
+        <div class="filters" id="projectFilters"></div>
+        <div class="projects" id="projectsGrid"></div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+      <div class="container reveal">
+        <div class="section__head">
+          <h2 class="section__title">Skills</h2>
+          <p class="section__desc">Tools and technologies I work with.</p>
+        </div>
+
+        <div class="skillsGrid" id="skillsGrid"></div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS & AWARDS -->
+    <section class="section" id="certifications">
+      <div class="container reveal">
+        <div class="section__head">
+          <h2 class="section__title">Certifications & Awards</h2>
+          <p class="section__desc">Courses, recognitions, and achievements.</p>
+        </div>
+        <div class="grid grid--2">
+          <div class="card">
+            <h3 class="card__title">Certifications</h3>
+            <div id="certList"></div>
+          </div>
+          <div class="card card--glass">
+            <h3 class="card__title">Awards & Achievements</h3>
+            <div id="awardList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact">
+      <div class="container reveal">
+        <div class="section__head">
+          <h2 class="section__title">Contact</h2>
+          <p class="section__desc">Fastest way: WhatsApp. Formal: Email.</p>
+        </div>
+
+        <div class="grid grid--2">
+          <div class="card">
+            <h3 class="card__title">Let’s talk</h3>
+            <p class="muted">Use the buttons below (or the floating buttons on the right).</p>
+
+            <div class="stack">
+              <a class="btn btn--primary" id="waBtn" href="#" target="_blank" rel="noreferrer">
+                WhatsApp
+                <span class="btn__arrow" aria-hidden="true">→</span>
+              </a>
+
+              <a class="btn btn--ghost" id="mailBtn" href="#">
+                Email
+                <span class="btn__arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            <div class="miniLinks">
+              <a id="linkedinBtn" href="#" target="_blank" rel="noreferrer">LinkedIn</a>
+              <span class="dot">•</span>
+              <a id="githubBtn" href="#" target="_blank" rel="noreferrer">GitHub</a>
+            </div>
+          </div>
+
+          <div class="card card--glass">
+            <h3 class="card__title">Message template</h3>
+            <p class="muted">Click to copy a ready-to-send message.</p>
+            <button class="copyBox" id="copyMsgBtn" type="button">
+              <span id="msgTemplate">Hi Ashutosh, I found your website and would like to connect.</span>
+              <span class="copyHint">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div>© <span id="year"></span> <span id="footerName">Ashutosh Kashyap</span></div>
+          <div class="footer__right">
+            Built with HTML • CSS • JS on Cloudflare
+          </div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating actions -->
+  <div class="fab" aria-label="Quick actions">
+    <a class="fab__btn" id="fabWa" href="#" target="_blank" rel="noreferrer" aria-label="WhatsApp">
+      <span class="fab__icon" aria-hidden="true">✆</span>
+      <span class="fab__text">WhatsApp</span>
+    </a>
+
+    <a class="fab__btn" id="fabMail" href="#" aria-label="Email">
+      <span class="fab__icon" aria-hidden="true">✉</span>
+      <span class="fab__text">Email</span>
+    </a>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
