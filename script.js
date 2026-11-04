@@ -4,10 +4,10 @@
 const DATA = {
   profile: {
     name: "Ashutosh Kashyap",
-    roleLine: "Software Engineer · .NET · AWS · GenAI",
+    roleLine: "Software Engineer • .NET • AWS • GenAI",
     tagline:
       "Backend engineer at Accenture building .NET Web APIs and cloud-native solutions on AWS and Azure OpenAI. Dual-degree from IIT Madras and IEM Kolkata. Interested in ML, Cybersecurity, and AI.",
-    availability: "Open to opportunities · Remote / Onsite",
+    availability: "Open to opportunities • Remote / Onsite",
 
     email: "ashutoshk.office@gmail.com",
     whatsappNumber: "917482065988",
@@ -18,6 +18,15 @@ const DATA = {
     resumeUrl: "./resume.pdf",
     location: "India",
   },
+
+  highlights: [
+    { k: "Current Role", v: "Software Engineer @ Accenture" },
+    { k: "IIT Madras", v: "B.S. Programming & Data Science" },
+    { k: "IEM Kolkata", v: "B.Tech. CS · CGPA 9.3 / 10" },
+    { k: "Focus", v: ".NET · AWS · GenAI · ML" },
+  ],
+
+  chips: [".NET (C#)", "Python", "AWS", "Azure OpenAI", "Machine Learning", "SAP UI5", "GenAI", "Data Science"],
 
   education: [
     {
@@ -149,13 +158,25 @@ const DATA = {
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 const enc = encodeURIComponent;
-const bareUrl = (url) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
-const ext = `target="_blank" rel="noreferrer"`;
+
+function initials(name) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((x) => x[0].toUpperCase())
+    .join("");
+}
 
 function setTheme(next) {
-  document.documentElement.dataset.theme = next;
-  try { localStorage.setItem("theme", next); } catch {}
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
   updateThemeIcon(next);
+}
+
+function getTheme() {
+  return localStorage.getItem("theme") ||
+    (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
 }
 
 function updateThemeIcon(theme) {
@@ -181,80 +202,232 @@ function updateThemeIcon(theme) {
 ---------------------------- */
 function render() {
   const p = DATA.profile;
-  const waLink = `https://wa.me/${p.whatsappNumber}?text=${enc(p.whatsappMessage)}`;
-  const mailLink = `mailto:${p.email}?subject=${enc("Hello Ashutosh")}`;
 
-  // Hero
+  $("#brandInitials").textContent = initials(p.name);
+  $("#brandName").textContent = p.name;
+  $("#brandRole").textContent = "Portfolio";
+
   $("#heroName").textContent = p.name;
-  $("#heroRole").textContent = p.roleLine;
-  $("#heroSummary").textContent = p.tagline;
-  $("#heroMeta").textContent = `Based in ${p.location} · ${p.availability}`;
-  $("#resumeBtn").href = p.resumeUrl;
+  $("#heroHeadline").textContent = p.roleLine;
+  $("#availabilityPill").textContent = p.availability;
+
+  $("#aboutTagline").textContent = p.tagline;
+  $("#aboutSummary").innerHTML = `
+    <p>${p.tagline}</p>
+    <p class="muted">Location: ${p.location}</p>
+  `;
+
+  // Chips
+  const chipWrap = $("#aboutChips");
+  chipWrap.innerHTML = "";
+  DATA.chips.forEach((c) => {
+    const span = document.createElement("span");
+    span.className = "chip";
+    span.textContent = c;
+    chipWrap.appendChild(span);
+  });
+
+  // Highlights
+  const hi = $("#highlights");
+  hi.innerHTML = "";
+  DATA.highlights.forEach((h) => {
+    const div = document.createElement("div");
+    div.className = "highlight";
+    div.innerHTML = `<div class="highlight__k">${h.k}</div><div class="highlight__v">${h.v}</div>`;
+    hi.appendChild(div);
+  });
+
+  // Links
+  const waLink = `https://wa.me/${p.whatsappNumber}?text=${enc(p.whatsappMessage)}`;
+  const mailLink = `mailto:${p.email}?subject=${enc("Hello Ashutosh")}&body=${enc("Hi Ashutosh,\n\n")}`;
+
+  $("#emailInline").textContent = p.email;
+  $("#emailInline").href = mailLink;
+
+  $("#waInline").href = waLink;
+
+  $("#linkedinInline").href = p.linkedin;
+  $("#githubInline").href = p.github;
+
+  $("#waBtn").href = waLink;
   $("#mailBtn").href = mailLink;
   $("#linkedinBtn").href = p.linkedin;
   $("#githubBtn").href = p.github;
 
+  $("#fabWa").href = waLink;
+  $("#fabMail").href = mailLink;
+
+  $("#resumeBtn").href = p.resumeUrl;
+
+  // Message template
+  $("#msgTemplate").textContent = p.whatsappMessage;
+
   // Experience
-  $("#experienceList").innerHTML = DATA.experience.map((e) => `
-    <article class="entry">
-      <div class="entry__head">
-        <h3 class="entry__title">${e.title} <span class="entry__org">· ${e.company}</span></h3>
-        <span class="entry__date">${e.period}</span>
+  const exp = $("#experienceList");
+  exp.innerHTML = "";
+  DATA.experience.forEach((e) => {
+    const item = document.createElement("div");
+    item.className = "tItem";
+    item.innerHTML = `
+      <div class="tTop">
+        <div>
+          <div class="tRole">${e.title} • ${e.company}</div>
+        </div>
+        <div class="tMeta">${e.period}</div>
       </div>
-      <ul class="bullets">${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
-    </article>
-  `).join("");
+      <ul class="tPoints">
+        ${e.bullets.map((b) => `<li>${b}</li>`).join("")}
+      </ul>
+    `;
+    exp.appendChild(item);
+  });
 
   // Projects
-  $("#projectsGrid").innerHTML = DATA.projects.map((pr) => {
-    const hasLink = pr.link && pr.link !== "#";
-    return `
-      <article>
-        <h3 class="project__name">${hasLink ? `<a href="${pr.link}" ${ext}>${pr.name} ↗</a>` : pr.name}</h3>
-        <p class="project__desc">${pr.desc}</p>
-        <p class="project__tags">${pr.tags.join(" · ")}</p>
-      </article>
-    `;
-  }).join("");
+  renderProjectFilters();
+  renderProjects("All");
 
   // Skills
-  $("#skillsList").innerHTML = Object.entries(DATA.skills)
-    .map(([group, items]) => `<div><dt>${group}</dt><dd>${items.join(", ")}</dd></div>`)
-    .join("");
+  const skillsGrid = $("#skillsGrid");
+  skillsGrid.innerHTML = "";
+  Object.entries(DATA.skills).forEach(([group, items]) => {
+    const card = document.createElement("div");
+    card.className = "sCard";
+    card.innerHTML = `
+      <h3 class="sTitle">${group}</h3>
+      <div class="sList">
+        ${items.map((x) => `<span class="sItem">${x}</span>`).join("")}
+      </div>
+    `;
+    skillsGrid.appendChild(card);
+  });
 
   // Education
-  $("#educationList").innerHTML = DATA.education.map((e) => `
-    <article class="entry">
-      <div class="entry__head">
-        <h3 class="entry__title">${e.degree}</h3>
-        <span class="entry__date">${e.period}</span>
-      </div>
-      <p class="entry__sub">${e.institution} · ${e.grade}</p>
-    </article>
-  `).join("");
+  renderEducation();
 
   // Certifications & Awards
-  $("#certList").innerHTML = DATA.certifications.map((c) => `
-    <article class="entry">
-      <div class="entry__head">
-        <h3 class="entry__title">${c.name}</h3>
-        <span class="entry__date">${c.status}</span>
-      </div>
-      <p class="entry__sub">${c.org}</p>
-    </article>
-  `).join("");
+  renderCertifications();
 
-  $("#awardList").innerHTML = DATA.awards.map((a) => `<li>${a}</li>`).join("");
-
-  // Contact
-  $("#contactList").innerHTML = `
-    <div><dt>Email</dt><dd><a href="${mailLink}">${p.email}</a></dd></div>
-    <div><dt>LinkedIn</dt><dd><a href="${p.linkedin}" ${ext}>${bareUrl(p.linkedin)}</a></dd></div>
-    <div><dt>GitHub</dt><dd><a href="${p.github}" ${ext}>${bareUrl(p.github)}</a></dd></div>
-    <div><dt>WhatsApp</dt><dd><a href="${waLink}" ${ext}>Send a message</a></dd></div>
-  `;
-
+  // Footer
   $("#year").textContent = String(new Date().getFullYear());
+  $("#footerName").textContent = p.name;
+  $("#footerLinks").innerHTML = `
+    <a href="${p.github}" target="_blank" rel="noreferrer">GitHub</a>
+    <span class="dot">•</span>
+    <a href="${p.linkedin}" target="_blank" rel="noreferrer">LinkedIn</a>
+  `;
+}
+
+/* ---------------------------
+   Projects filtering
+---------------------------- */
+function renderProjectFilters() {
+  const wrap = $("#projectFilters");
+  const cats = ["All", ...Array.from(new Set(DATA.projects.map((p) => p.category)))];
+
+  wrap.innerHTML = "";
+  cats.forEach((c, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `filterBtn ${i === 0 ? "active" : ""}`;
+    btn.textContent = c;
+
+    btn.addEventListener("click", () => {
+      $$(".filterBtn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderProjects(c);
+    });
+
+    wrap.appendChild(btn);
+  });
+}
+
+function renderProjects(category) {
+  const grid = $("#projectsGrid");
+  grid.innerHTML = "";
+
+  const list = category === "All"
+    ? DATA.projects
+    : DATA.projects.filter((p) => p.category === category);
+
+  list.forEach((p) => {
+    const hasLink = p.link && p.link !== "#";
+    const card = document.createElement(hasLink ? "a" : "div");
+    card.className = "pCard";
+    if (hasLink) {
+      card.href = p.link;
+      card.target = "_blank";
+      card.rel = "noreferrer";
+    }
+
+    card.innerHTML = `
+      <h3 class="pName">${p.name}</h3>
+      <p class="pDesc">${p.desc}</p>
+      <div class="pTags">
+        ${p.tags.map((t) => `<span class="pTag">${t}</span>`).join("")}
+      </div>
+      ${p.link && p.link !== "#" ? `<div class="pLink">View →</div>` : ""}
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+/* ---------------------------
+   Education & Certifications
+---------------------------- */
+function renderEducation() {
+  const grid = $("#educationList");
+  if (!grid) return;
+  grid.innerHTML = "";
+  DATA.education.forEach((e) => {
+    const card = document.createElement("div");
+    card.className = "eduCard";
+    card.innerHTML = `
+      <div class="eduTop">
+        <div class="eduInst">${e.institution}</div>
+        <div class="eduGrade">${e.grade}</div>
+      </div>
+      <div class="eduDeg">${e.degree}</div>
+      <div class="eduPeriod">${e.period}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderCertifications() {
+  const certList = $("#certList");
+  const awardList = $("#awardList");
+
+  if (certList) {
+    certList.innerHTML = "";
+    DATA.certifications.forEach((c) => {
+      const cls = c.status === "Completed" || c.status === "A+"
+        ? "completed"
+        : c.status === "Ongoing"
+        ? "ongoing"
+        : "enrolled";
+      const div = document.createElement("div");
+      div.className = "certItem";
+      div.innerHTML = `
+        <div class="certInfo">
+          <div class="certName">${c.name}</div>
+          <div class="certOrg">${c.org}</div>
+        </div>
+        <span class="certBadge certBadge--${cls}">${c.status}</span>
+      `;
+      certList.appendChild(div);
+    });
+  }
+
+  if (awardList) {
+    awardList.innerHTML = "";
+    DATA.awards.forEach((a) => {
+      const div = document.createElement("div");
+      div.className = "awardItem";
+      div.innerHTML = `<span class="awardDot" aria-hidden="true">▸</span><span>${a}</span>`;
+      awardList.appendChild(div);
+    });
+  }
 }
 
 /* ---------------------------
@@ -263,41 +436,117 @@ function render() {
 function setupMobileMenu() {
   const btn = $("#menuBtn");
   const menu = $("#mobileMenu");
-  const toggle = (open) => {
-    menu.hidden = !open;
-    btn.setAttribute("aria-expanded", String(open));
-  };
 
-  btn.addEventListener("click", () => toggle(menu.hidden));
-  $$(".mobile__link").forEach((a) => a.addEventListener("click", () => toggle(false)));
+  btn.addEventListener("click", () => {
+    const show = !menu.classList.contains("show");
+    menu.classList.toggle("show", show);
+    menu.setAttribute("aria-hidden", show ? "false" : "true");
+  });
+
+  $$(".mobile__link").forEach((a) => {
+    a.addEventListener("click", () => {
+      menu.classList.remove("show");
+      menu.setAttribute("aria-hidden", "true");
+    });
+  });
 }
 
 function setupTheme() {
-  // Initial theme is set by the inline script in <head>
-  updateThemeIcon(document.documentElement.dataset.theme || "light");
+  const theme = getTheme();
+  setTheme(theme);
 
   $("#themeToggle").addEventListener("click", () => {
-    setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+    const current = document.documentElement.getAttribute("data-theme") || "dark";
+    setTheme(current === "dark" ? "light" : "dark");
   });
+}
+
+function setupCopy() {
+  $("#copyEmailBtn").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(DATA.profile.email);
+      toast("Email copied ✅");
+    } catch {
+      toast("Copy failed");
+    }
+  });
+
+  $("#copyMsgBtn").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(DATA.profile.whatsappMessage);
+      toast("Message copied ✅");
+    } catch {
+      toast("Copy failed");
+    }
+  });
+}
+
+function toast(text) {
+  let el = $("#toast");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "toast";
+    el.style.position = "fixed";
+    el.style.left = "50%";
+    el.style.bottom = "86px";
+    el.style.transform = "translateX(-50%)";
+    el.style.padding = "10px 14px";
+    el.style.borderRadius = "999px";
+    el.style.border = "1px solid rgba(255,255,255,.18)";
+    el.style.background = "rgba(0,0,0,.55)";
+    el.style.color = "white";
+    el.style.backdropFilter = "blur(10px)";
+    el.style.zIndex = "100";
+    el.style.fontSize = "13px";
+    document.body.appendChild(el);
+  }
+  el.textContent = text;
+  el.style.opacity = "1";
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => {
+    el.style.opacity = "0";
+  }, 1400);
+}
+
+function setupScrollProgress() {
+  const bar = $(".scroll-progress");
+  const onScroll = () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    bar.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+}
+
+function setupReveal() {
+  const els = $$(".reveal");
+  if (!("IntersectionObserver" in window)) {
+    els.forEach((e) => e.classList.add("is-visible"));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (en.isIntersecting) en.target.classList.add("is-visible");
+    });
+  }, { threshold: 0.12 });
+
+  els.forEach((e) => io.observe(e));
 }
 
 function setupActiveNav() {
   const links = $$(".nav__link");
   const sections = links.map((a) => $(a.getAttribute("href")));
 
-  // Active = last section whose top passed 40% of the viewport; the last one once scrolled to the bottom
-  const onScroll = () => {
-    const h = document.documentElement;
-    let current = -1;
-    sections.forEach((s, i) => {
-      if (s.getBoundingClientRect().top <= innerHeight * 0.4) current = i;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      const id = `#${en.target.id}`;
+      links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === id));
     });
-    if (innerHeight + scrollY >= h.scrollHeight - 2) current = sections.length - 1;
-    links.forEach((a, i) => a.classList.toggle("active", i === current));
-  };
+  }, { rootMargin: "-40% 0px -55% 0px", threshold: 0.01 });
 
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
+  sections.forEach((s) => s && io.observe(s));
 }
 
 /* ---------------------------
@@ -307,5 +556,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTheme();
   render();
   setupMobileMenu();
+  setupCopy();
+  setupScrollProgress();
+  setupReveal();
   setupActiveNav();
 });
